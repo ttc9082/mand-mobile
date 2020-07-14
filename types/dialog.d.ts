@@ -5,7 +5,10 @@ export type DialogOptions = {
   title?: string
   content?: string
   confirmText?: string
+  onCancel?: () => void
   onConfirm?: () => void
+  onShow?: () => void
+  onHide?: () => void
 }
 
 export type DialogAlertOptions = {

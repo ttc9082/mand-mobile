@@ -37,6 +37,8 @@ import CellItem from './cell-item'
 import Switch from './switch'
 import Agree from './agree'
 import Radio from './radio'
+import RadioGroup from './radio-group'
+import RadioBox from './radio-box'
 import RadioList from './radio-list'
 import DatePicker from './date-picker'
 import Captcha from './captcha'
@@ -58,6 +60,9 @@ import Transition from './transition'
 import DetailItem from './detail-item'
 import Slider from './slider'
 import Progress from './progress'
+import Ruler from './ruler'
+import TextareaItem from './textarea-item'
+import Skeleton from './skeleton'
 /* @init<%import ${componentNameUpper} from './${componentName}'%> */
 
 // Totally importing reminder
@@ -103,6 +108,8 @@ export const components = {
   Switch,
   Agree,
   Radio,
+  RadioGroup,
+  RadioBox,
   RadioList,
   DatePicker,
   Captcha,
@@ -125,6 +132,9 @@ export const components = {
   DetailItem,
   Slider,
   Progress,
+  Ruler,
+  TextareaItem,
+  Skeleton,
   /* @init<%${componentNameUpper},%> */
 }
 
@@ -191,6 +201,8 @@ export {
   Switch,
   Agree,
   Radio,
+  RadioGroup,
+  RadioBox,
   RadioList,
   DatePicker,
   Captcha,
@@ -213,6 +225,9 @@ export {
   DetailItem,
   Slider,
   Progress,
+  Ruler,
+  TextareaItem,
+  Skeleton,
   /* @init<%${componentNameUpper},%> */
 }
 

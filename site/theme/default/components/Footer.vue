@@ -1,13 +1,13 @@
 <template>
   <div class="mfe-blog-theme-default-footer">
     <div class="default-footer-container">
-      <ul class="default-footer-category">
+      <!-- <ul class="default-footer-category">
         <h1>
           <img src="//manhattan.didistatic.com/static/manhattan/mand/docs/mand-logo-white.svg" alt="">
           <br>
           <span>Mand Mobile</span>
         </h1>
-      </ul>
+      </ul> -->
       <ul
         class="default-footer-category"
         v-for="(items, i) in list"
@@ -58,15 +58,13 @@ export default {
 </script>
 
 <style lang="stylus">
-clearfix()
-  &:after
-    content ""
-    clear both
-    display table
 .mfe-blog-theme-default-footer
   position relative
   height 673px
   -webkit-font-smoothing antialiased
+  &.stricky
+    .default-footer-container, .default-footer-copyright-container
+      left 16.6%
 
   .default-footer-bg
     position absolute
@@ -98,6 +96,7 @@ clearfix()
     box-sizing border-box
     clearfix()
   .default-footer-copyright-container
+    position relative
     width 1280px
     margin 0 auto
 

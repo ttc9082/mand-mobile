@@ -1,5 +1,8 @@
 <template>
-  <div class="mfe-blog-theme-default-menu" :class="{active: value}">
+  <div
+    class="mfe-blog-theme-default-menu"
+    :class="{active: value}"
+  >
     <div class="menu-ggs" v-if="menuAds && menuAds.length">
       <a
         v-for="(gg, index) in menuAds"
@@ -11,21 +14,27 @@
     </div>
     <ul class="menu-list-0">
       <li class="menu-item-0" v-for="(item0, index0) in menu" :key="index0">
+        <a :href="item0.link" v-if="item0.link" v-html="item0.text" target="_blank"></a>
         <router-link 
+          v-else
           :to="`/${lang}/${nav}/${item0.name}`"
           :class="{disabled: !item0.src && !item0.markdown}"
           v-html="item0.text">
         </router-link> 
         <ul class="menu-list-1" v-if="item0.menu">
           <li class="menu-item-1" v-for="(item1, index1) in item0.menu" :key="index1">
+            <a :href="item1.link" v-if="item1.link" v-html="item1.text" target="_blank"></a>
             <router-link 
+              v-else
               :to="`/${lang}/${nav}/${item0.name}/${item1.name}`"
               :class="{disabled: !item1.src && !item1.markdown}"
               v-html="item1.text">
             </router-link> 
             <ul class="menu-list-2" v-if="item1.menu">
               <li class="menu-item-2" v-for="(item2, index2) in item1.menu" :key="index2">
+                <a :href="item2.link" v-if="item2.link" v-html="item2.text" target="_blank"></a>
                 <router-link
+                  v-else
                   :to="`/${lang}/${nav}/${item0.name}/${item1.name}/${item2.name}`"
                   :class="{disabled: !item2.src && !item2.markdown}"
                   v-html="item2.text">
@@ -56,6 +65,11 @@ export default {
       }
     }
   },
+  data () {
+    return {
+      containerHeight: 0
+    }
+  },
   watch: {
     value (val) {
       if (val) {
@@ -83,15 +97,23 @@ export default {
 <style lang="stylus">
 .mfe-blog-theme-default-menu
   float left
-  width 16.666%
+  // width 16.666%
   // min-height 1500px
   height 100%
+  max-height 100vh
   // padding 32px 0
   box-sizing border-box
   border-right solid 1px #e8e8e8
   -webkit-font-smoothing antialiased
   background #FFF
-  overflow hidden
+  overflow auto
+  -webkit-overflow-scrolling touch
+  &.stricky
+    position fixed
+    z-index 3
+    top 20px
+    left 0
+    overflow-y auto
   .menu-ggs
     padding 0 40px 10px 40px
     .menu-ggs-item
@@ -103,6 +125,7 @@ export default {
   .menu-list-0
     position relative
     top -10px
+    padding-bottom 32px
   ul, li, a
     float left
     width 100%

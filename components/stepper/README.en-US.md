@@ -22,7 +22,6 @@ Vue.component(Stepper.name, Stepper)
 |Props | Description | Type | Default |
 |---------|------|--------|----|
 |v-model | current value | Number/String |-|
-|default-value |stepper initial value| Number/String|-|
 |step|the number of steps can be changed and be a decimal|Number/String|`1`|
 |min|minimum|Number/String|`-Infinity`|
 |max|maximum|Number/String|`Infinity`|
@@ -34,3 +33,17 @@ Vue.component(Stepper.name, Stepper)
 
 ##### @change(currentValue)
 Change value
+
+##### @increase(difference)
+Triggered when the current value increases <sup class="version-after">2.2.0+</sup>
+
+|Props | Description | Type|
+|----|-----|------|
+|difference|Increased value|Number|
+
+##### @decrease(difference)
+Triggered when the current value decreases <sup class="version-after">2.2.0+</sup>
+
+|Props | Description | Type|
+|----|-----|------|
+|difference|Reduced value|Number|

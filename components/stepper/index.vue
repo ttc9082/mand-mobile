@@ -15,6 +15,7 @@
         :value="currentNum"
         :readOnly="readOnly"
         @input="$_onInput"
+        @focus="$_onFocus"
         @blur="$_onChange">
     </div>
     <div
@@ -94,6 +95,7 @@ export default {
     return {
       isMin: false,
       isMax: false,
+      isEditing: false,
       currentNum: 0,
     }
   },
@@ -113,6 +115,9 @@ export default {
       this.currentNum = this.$_getCurrentNum(val)
     },
     value(val) {
+      if (this.isEditing) {
+        return
+      }
       this.currentNum = this.$_getCurrentNum(val)
     },
     min(val) {
@@ -127,10 +132,22 @@ export default {
       }
       this.$_checkStatus()
     },
-    currentNum(val) {
+    currentNum(val, oldVal) {
       this.$_checkStatus()
-      this.$emit('input', +val)
-      this.$emit('change', +val)
+
+      if (val !== this.value) {
+        this.$emit('input', val)
+        this.$emit('change', val)
+      }
+
+      const diff = val - oldVal
+
+      // judge the event of operation
+      if (diff > 0) {
+        this.$emit('increase', diff)
+      } else if (diff < 0) {
+        this.$emit('decrease', Math.abs(diff))
+      }
     },
   },
 
@@ -166,8 +183,8 @@ export default {
       return Math.max(Math.min(this.max, this.$_formatNum(value)), this.min)
     },
     $_checkStatus() {
-      this.isMin = subtr(this.currentNum, this.step) < this.min
-      this.isMax = accAdd(this.currentNum, this.step) > this.max
+      this.isMin = this.currentNum <= this.min
+      this.isMax = this.currentNum >= this.max
     },
     $_checkMinMax() {
       if (this.min > this.max) {
@@ -185,7 +202,11 @@ export default {
       }
       this.currentNum = formatted
     },
+    $_onFocus() {
+      this.isEditing = true
+    },
     $_onChange() {
+      this.isEditing = false
       this.currentNum = this.$_getCurrentNum(this.currentNum)
     },
   },
@@ -212,7 +233,7 @@ export default {
   width stepper-width-button
   height stepper-height
   background-color stepper-fill
-  border-radius 2px
+  border-radius stepper-radius-button
   &:after
     content ""
     position absolute
@@ -243,7 +264,7 @@ export default {
   height stepper-height
   padding 0 4px
   text-align center
-  border-radius stepper-radius-button
+  border-radius stepper-radius-input
   background-color stepper-fill
   input
     width 100%
@@ -256,5 +277,4 @@ export default {
     box-sizing border-box
     text-align center
     color stepper-color
-    border-radius stepper-radius-input
 </style>

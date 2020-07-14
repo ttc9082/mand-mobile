@@ -22,7 +22,6 @@ Vue.component(Stepper.name, Stepper)
 |属性    | 说明 | 类型 | 默认值|
 |---------|------|--------|----|
 |v-model| 当前值 | Number/String |-|
-|default-value |默认值| Number/String|-|
 |step|每次改变步数，可以为小数|Number/String|`1`|
 |min|最小值|Number/String|`-Infinity`|
 |max|最大值|Number/String|`Infinity`|
@@ -34,3 +33,17 @@ Vue.component(Stepper.name, Stepper)
 
 ##### @change(currentValue)
 值发生变化事件
+
+##### @increase(difference)
+当前值增加时触发 <sup class="version-after">2.2.0+</sup>
+
+|属性 | 说明 | 类型|
+|----|-----|------|
+|difference|增加的数值|Number|
+
+##### @decrease(difference)
+当前值减少时触发 <sup class="version-after">2.2.0+</sup>
+
+|属性 | 说明 | 类型|
+|----|-----|------|
+|difference|减少的数值|Number|

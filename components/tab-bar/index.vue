@@ -12,7 +12,7 @@
         :key="scrollerTmpKey"
         @scroll="$_onScroll"
       >
-        <div class="md-tab-bar-list" :style="{width: contentW + 'px'}">
+         <div class="md-tab-bar-list" :style="{width: contentW + 'px'}">
           <a
             class="md-tab-bar-item"
             :class="{
@@ -128,6 +128,7 @@ export default {
       })
     },
     items() {
+      /* istanbul ignore next */
       this.$nextTick(function() {
         this.reflow()
       })
@@ -138,6 +139,7 @@ export default {
       })
     },
     scrollable() {
+      /* istanbul ignore next */
       this.scrollerTmpKey = Date.now()
     },
   },
@@ -149,17 +151,18 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener('resize', this.reflow)
-    this.reflow()
-
-    if (this.immediate) {
-      this.$nextTick(() => {
-        this.$emit('change', this.items[this.currentIndex], this.currentIndex)
-      })
-    }
+    this.$_resizeEnterBehavior()
+  },
+  activated() {
+    /* istanbul ignore next */
+    this.$_resizeEnterBehavior()
+  },
+  deactivated() {
+    /* istanbul ignore next */
+    this.$_resizeLeaveBehavior()
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.reflow)
+    this.$_resizeLeaveBehavior()
   },
 
   methods: {
@@ -185,21 +188,38 @@ export default {
       this.currentName = item.name
       this.$emit('input', item.name)
     },
+    $_resizeEnterBehavior() {
+      window.addEventListener('resize', this.reflow)
+      this.reflow()
+      /* istanbul ignore next */
+      if (this.immediate) {
+        this.$nextTick(() => {
+          this.$emit('change', this.items[this.currentIndex], this.currentIndex)
+        })
+      }
+    },
+    $_resizeLeaveBehavior() {
+      window.removeEventListener('resize', this.reflow)
+    },
     // MARK: public methods
     reflow() {
+      /* istanbul ignore next */
       if (!this.$refs.items || this.$refs.items.length === 0) {
         return
       }
 
-      this.wrapperW = this.$refs.wrapper.offsetWidth
+      const wrapperReact = this.$refs.wrapper.getBoundingClientRect()
+      this.wrapperW = wrapperReact.width
 
       let contentWidth = 0
       for (let i = 0, len = this.items.length; i < len; i++) {
-        contentWidth += this.$refs.items[i].offsetWidth
+        const {width} = this.$refs.items[i].getBoundingClientRect()
+        contentWidth += width
       }
       this.contentW = contentWidth
       this.$refs.scroller.reflowScroller()
       this.$nextTick(() => {
+        /* istanbul ignore next */
         if (!this.$refs.items || !this.$refs.items[this.currentIndex]) {
           return
         }
@@ -211,9 +231,19 @@ export default {
         const prevTarget = this.$refs.items[this.currentIndex - 1]
         const nextTarget = this.$refs.items[this.currentIndex + 1]
 
+        if (!prevTarget) {
+          this.$refs.scroller.scrollTo(0, 0, true)
+          return
+        }
+        /* istanbul ignore next */
+        if (!nextTarget) {
+          this.$refs.scroller.scrollTo(this.contentW, 0, true)
+          return
+        }
+
         const wrapperRect = this.$refs.wrapper.getBoundingClientRect()
-        const prevTargetRect = prevTarget && prevTarget.getBoundingClientRect()
-        const nextTargetRect = nextTarget && nextTarget.getBoundingClientRect()
+        const prevTargetRect = prevTarget.getBoundingClientRect()
+        const nextTargetRect = nextTarget.getBoundingClientRect()
 
         /* istanbul ignore next */
         if (prevTargetRect && prevTargetRect.left < wrapperRect.left) {
@@ -245,6 +275,7 @@ export default {
   min-width 100%
 
 .md-tab-bar-item
+  flex auto
   flex-shrink 0
   position relative
   display inline-flex
@@ -257,6 +288,8 @@ export default {
   padding 0 tab-item-gap
   margin 0 auto
   box-sizing border-box
+  -webkit-user-select none
+  -webkit-tap-highlight-color transparent
   &.is-active
     color tab-active-color
   &.is-disabled

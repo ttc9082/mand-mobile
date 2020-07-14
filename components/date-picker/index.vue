@@ -11,8 +11,10 @@
       :describe="describe"
       :ok-text="okText"
       :cancel-text="cancelText"
+      :large-radius="largeRadius"
       :is-view="isView"
       :mask-closable="maskClosable"
+      :keep-index="keepIndex"
       @initialed="$emit('initialed')"
       @change="$_onPickerChange"
       @confirm="$_onPickerConfirm"
@@ -37,6 +39,7 @@ const TYPE_FORMAT = {
   'yyyy': 'Year',
   'MM': 'Month',
   'dd': 'Date',
+  'HH': 'Hour',
   'hh': 'Hour',
   'mm': 'Minute'
 }
@@ -350,7 +353,7 @@ export default {
         Minute: this.currentMinutes
       }
       args.map(item => {
-        defaultArguments[item.type] = item.value
+        item && (defaultArguments[item.type] = item.value)
       })
       return defaultArguments
     },
@@ -553,7 +556,8 @@ export default {
         if (value < 10) {
           value = '0' + value
         }
-
+        
+        format = format.replace('HH', 'hh') // deal with HH as hh
         format = format.replace(item.type, value)
         format = format.replace(TYPE_FORMAT_INVERSE[item.type], value)
       })

@@ -17,10 +17,10 @@
       @click="$_select(item, index)"
     >
       <template v-if="hasSlot">
-        <slot :option="item"></slot>
+        <slot :option="item" :index="index" :selected="currentValue === item.value"></slot>
       </template>
       <md-radio
-        v-if="!alignCenter && !inputSelected"
+        v-if="!alignCenter && !inputSelected && !withoutIcon"
         :name="item.value"
         v-model="selectedValue"
         :disabled="item.disabled"
@@ -142,6 +142,9 @@ export default {
     hasSlot() {
       return this.isSlotScope !== undefined ? this.isSlotScope : !!this.$scopedSlots.default
     },
+    withoutIcon() {
+      return this.isSlotScope && !this.icon
+    },
   },
 
   watch: {
@@ -160,6 +163,7 @@ export default {
     $_select(option, index) {
       this.selectedValue = option.value
       this.inputSelected = false
+      this.inputValue && (this.inputValue = '')
       this.$emit('change', option, index)
     },
     // MARK: public methods
